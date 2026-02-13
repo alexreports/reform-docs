@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connections Map</title>
+    <title>Connections Map | Reform Docs</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet"/>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Playfair+Display:wght@900&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Source Sans 3', sans-serif;
             background: #0d1117;
             color: #e6edf3;
             height: 100vh;
@@ -17,7 +18,8 @@
             flex-direction: column;
         }
         header {
-            padding: 16px 24px;
+            border-top: 5px solid #cc0000;
+            padding: 12px 24px;
             background: #161b22;
             border-bottom: 1px solid #30363d;
             display: flex;
@@ -25,188 +27,137 @@
             justify-content: space-between;
             flex-shrink: 0;
         }
-        header h1 {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: #e6edf3;
-            letter-spacing: 0.02em;
-        }
-        header a {
-            color: #58a6ff;
+        .site-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2em;
+            font-weight: 900;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 0.9em;
         }
-        .legend {
-            display: flex;
-            gap: 20px;
-            font-size: 0.82em;
-            color: #8b949e;
-        }
-        .legend-item { display: flex; align-items: center; gap: 6px; }
-        .legend-dot {
-            width: 12px; height: 12px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        #graph-container {
-            flex: 1;
-            position: relative;
-        }
+        .header-right { display: flex; align-items: center; gap: 24px; }
+        .legend { display: flex; gap: 16px; font-size: 0.78em; color: #8b949e; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        header a { color: #8b949e; text-decoration: none; font-size: 0.82em; }
+        header a:hover { color: #ffffff; }
+        #graph-container { flex: 1; position: relative; }
         #graph { width: 100%; height: 100%; }
         #info-panel {
             position: absolute;
-            top: 16px;
-            right: 16px;
+            top: 16px; right: 16px;
             width: 280px;
             background: #161b22;
             border: 1px solid #30363d;
-            border-radius: 8px;
+            border-top: 3px solid #cc0000;
+            border-radius: 2px;
             padding: 16px;
             display: none;
             z-index: 10;
         }
         #info-panel h2 {
             font-size: 1em;
-            color: #e6edf3;
-            margin-bottom: 4px;
+            color: #ffffff;
+            margin-bottom: 2px;
         }
         #info-type {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: #8b949e;
             margin-bottom: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
         }
         #info-articles { list-style: none; }
-        #info-articles li { margin-bottom: 6px; }
-        #info-articles a {
-            color: #58a6ff;
-            text-decoration: none;
-            font-size: 0.88em;
-            line-height: 1.4;
-        }
-        #info-articles a:hover { text-decoration: underline; }
+        #info-articles li { margin-bottom: 6px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
+        #info-articles a { color: #0000cc; text-decoration: underline; font-size: 0.85em; line-height: 1.4; }
+        #info-articles a:hover { color: #cc0000; }
         #info-close {
-            position: absolute;
-            top: 10px; right: 12px;
-            cursor: pointer;
-            color: #8b949e;
-            font-size: 1.2em;
-            line-height: 1;
-            background: none;
-            border: none;
-            color: #8b949e;
+            position: absolute; top: 10px; right: 12px;
+            cursor: pointer; background: none; border: none;
+            color: #8b949e; font-size: 1.1em;
         }
-        #info-close:hover { color: #e6edf3; }
-        #article-count {
-            font-size: 0.82em;
-            color: #8b949e;
-        }
+        #info-close:hover { color: #cc0000; }
         footer {
-            padding: 10px 24px;
+            padding: 8px 24px;
             background: #161b22;
             border-top: 1px solid #30363d;
-            font-size: 0.78em;
+            font-size: 0.75em;
             color: #484f58;
-            flex-shrink: 0;
+            display: flex;
+            gap: 24px;
         }
     </style>
 </head>
 <body>
 <header>
-    <h1>Connections Map</h1>
-    <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#e05c5c"></div>Person</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#4a9eff"></div>Company / Org</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#3dba76"></div>Government</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#c7a33a"></div>Other</div>
+    <a href="../index.html" class="site-name">Reform Docs</a>
+    <div class="header-right">
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#cc0000"></div>Person</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#0000cc"></div>Company / Org</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#228833"></div>Government</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#cc8800"></div>Other</div>
+        </div>
+        <a href="../index.html">Back to Index</a>
     </div>
-    <a href="index.html">Back to Index</a>
 </header>
 <div id="graph-container">
     <div id="graph"></div>
     <div id="info-panel">
-        <button id="info-close" onclick="closePanel()">x</button>
+        <button id="info-close" onclick="closePanel()">&#x2715;</button>
         <h2 id="info-name"></h2>
         <div id="info-type"></div>
         <ul id="info-articles"></ul>
     </div>
 </div>
-<footer>Updated: February 13, 2026 &nbsp;|&nbsp; 7 entities &nbsp;|&nbsp; 7 connections &nbsp;|&nbsp; 1 articles</footer>
-
+<footer>
+    <span>Updated: February 13, 2026</span>
+    <span>7 entities</span>
+    <span>7 connections</span>
+    <span>1 articles</span>
+    <span>Click any node to see related articles</span>
+</footer>
 <script>
 const GRAPH_DATA = {"nodes": [{"id": 0, "label": "Karl Malenfant", "type": "person", "articles": [{"title": "SAAQclic: The Gallant Report and What Comes Next", "path": "canada/quebec/saaqclic/saaqclic-gallant-report.html"}], "article_count": 1}, {"id": 1, "label": "Denis Gallant", "type": "person", "articles": [{"title": "SAAQclic: The Gallant Report and What Comes Next", "path": "canada/quebec/saaqclic/saaqclic-gallant-report.html"}], "article_count": 1}, {"id": 2, "label": "SAAQ", "type": "government", "articles": [{"title": "SAAQclic: The Gallant Report and What Comes Next", "path": "canada/quebec/saaqclic/saaqclic-gallant-report.html"}], "article_count": 1}, {"id": 3, "label": "IBM/LGS", "type": "company", "articles": [{"title": "SAAQclic: The Gallant Report and What Comes Next", "path": "canada/quebec/saaqclic/saaqclic-gallant-report.html"}], "article_count": 1}, {"id": 4, "label": "UPAC", "type": "government", "articles": [{"title": "SAAQclic: The Gallant Report and What Comes Next", "path": "canada/quebec/saaqclic/saaqclic-gallant-report.html"}], "article_count": 1}, {"id": 5, "label": "Francois Dagenais", "type": "person", "articles": [{"title": "SAAQclic: The Gallant Report and What Comes Next", "path": "canada/quebec/saaqclic/saaqclic-gallant-report.html"}], "article_count": 1}, {"id": 6, "label": "CAQ Government", "type": "government", "articles": [{"title": "SAAQclic: The Gallant Report and What Comes Next", "path": "canada/quebec/saaqclic/saaqclic-gallant-report.html"}], "article_count": 1}], "edges": [{"from": 0, "to": 2, "weight": 1}, {"from": 3, "to": 0, "weight": 1}, {"from": 3, "to": 2, "weight": 1}, {"from": 5, "to": 4, "weight": 1}, {"from": 5, "to": 2, "weight": 1}, {"from": 1, "to": 2, "weight": 1}, {"from": 6, "to": 2, "weight": 1}]};
-
 const TYPE_COLORS = {
-    person:     { background: "#e05c5c", border: "#c43c3c", highlight: { background: "#ff7f7f", border: "#e05c5c" } },
-    company:    { background: "#4a9eff", border: "#2a7edd", highlight: { background: "#74b9ff", border: "#4a9eff" } },
-    government: { background: "#3dba76", border: "#2a9457", highlight: { background: "#55d68c", border: "#3dba76" } },
-    other:      { background: "#c7a33a", border: "#a0801e", highlight: { background: "#e0bb50", border: "#c7a33a" } }
+    person:     { background:"#cc0000", border:"#990000", highlight:{background:"#ff3333",border:"#cc0000"} },
+    company:    { background:"#0000cc", border:"#000099", highlight:{background:"#3333ff",border:"#0000cc"} },
+    government: { background:"#228833", border:"#1a6625", highlight:{background:"#33aa44",border:"#228833"} },
+    other:      { background:"#cc8800", border:"#996600", highlight:{background:"#ffaa00",border:"#cc8800"} }
 };
-
-function getColor(type) {
-    return TYPE_COLORS[type] || TYPE_COLORS.other;
-}
-
 const nodes = new vis.DataSet(
     GRAPH_DATA.nodes.map(n => ({
-        id: n.id,
-        label: n.label,
-        color: getColor(n.type),
-        font: { color: "#e6edf3", size: 13, face: "Arial" },
+        id: n.id, label: n.label,
+        color: TYPE_COLORS[n.type] || TYPE_COLORS.other,
+        font: { color:"#e6edf3", size:12, face:"Source Sans 3, sans-serif" },
         borderWidth: 2,
-        size: Math.min(10 + (n.article_count * 6), 40),
-        title: n.label + " (" + n.article_count + " article" + (n.article_count !== 1 ? "s" : "") + ")"
+        size: Math.min(10 + (n.article_count * 7), 42),
+        title: n.label
     }))
 );
-
 const edges = new vis.DataSet(
     GRAPH_DATA.edges.map(e => ({
-        from: e.from,
-        to: e.to,
+        from:e.from, to:e.to,
         width: Math.min(1 + e.weight, 6),
-        color: { color: "#30363d", highlight: "#58a6ff", opacity: 0.8 },
-        smooth: { type: "curvedCW", roundness: 0.1 }
+        color:{ color:"#30363d", highlight:"#cc0000", opacity:0.8 },
+        smooth:{ type:"curvedCW", roundness:0.1 }
     }))
 );
-
-const container = document.getElementById("graph");
-const network = new vis.Network(container, { nodes, edges }, {
-    physics: {
-        stabilization: { iterations: 150 },
-        barnesHut: {
-            gravitationalConstant: -3000,
-            centralGravity: 0.3,
-            springLength: 180,
-            springConstant: 0.04,
-            damping: 0.2
-        }
-    },
-    interaction: {
-        hover: true,
-        tooltipDelay: 200,
-        zoomView: true,
-        dragView: true
-    },
-    nodes: {
-        shape: "dot",
-        scaling: { min: 10, max: 40 }
-    },
-    edges: {
-        arrows: { to: { enabled: false } }
+const network = new vis.Network(
+    document.getElementById("graph"),
+    { nodes, edges },
+    {
+        physics:{ stabilization:{iterations:150}, barnesHut:{ gravitationalConstant:-3000, centralGravity:0.3, springLength:180, springConstant:0.04, damping:0.2 } },
+        interaction:{ hover:true, tooltipDelay:200, zoomView:true, dragView:true },
+        nodes:{ shape:"dot" },
+        edges:{ arrows:{ to:{ enabled:false } } }
     }
-});
-
-network.on("click", function(params) {
-    if (params.nodes.length > 0) {
-        const nodeId = params.nodes[0];
-        const node = GRAPH_DATA.nodes.find(n => n.id === nodeId);
+);
+network.on("click", function(p) {
+    if (p.nodes.length > 0) {
+        const node = GRAPH_DATA.nodes.find(n => n.id === p.nodes[0]);
         if (node) showPanel(node);
-    } else {
-        closePanel();
-    }
+    } else { closePanel(); }
 });
-
 function showPanel(node) {
     document.getElementById("info-name").textContent = node.label;
     document.getElementById("info-type").textContent = node.type;
@@ -222,7 +173,6 @@ function showPanel(node) {
     });
     document.getElementById("info-panel").style.display = "block";
 }
-
 function closePanel() {
     document.getElementById("info-panel").style.display = "none";
 }
